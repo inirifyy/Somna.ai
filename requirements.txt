@@ -1,1 +1,17 @@
-	# Menentukan library Python yang dibutuhkan
+# 1. Framework Web
+Flask
+python-dotenv
+
+# 2. Pengolahan Data & Machine Learning
+numpy
+pandas
+scikit-learn
+joblib
+
+# 3. Grafik & Eksplorasi Data (untuk Jupyter Notebook)
+matplotlib
+seaborn
+ipykernel
+
+# 4. Pengujian Kode
+pytest

@@ -1,0 +1,1 @@
+# Mengatur konfigurasi dasar aplikasi

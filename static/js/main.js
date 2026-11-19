@@ -1,0 +1,1 @@
+// Mengatur interaksi halaman utama

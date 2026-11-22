@@ -1,61 +1,26 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}Somna.ai{% endblock %}</title>
+  <title>{% block title %}Somna.ai — Pahami Pola Tidur &amp; Tingkatkan Produktivitas{% endblock %}</title>
   <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter, Space Grotesk, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
   {% block extra_css %}{% endblock %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}" />
 </head>
-<body>
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <a href="{{ url_for('main.index') }}" class="brand">
-        <img
-          src="{{ url_for('static', filename='images/logo.png') }}"
-          alt="Logo Somna.ai"
-          class="brand-logo"
-          onerror="this.style.display='none'"
-        />
-        <span>Somna<strong>.ai</strong></span>
-      </a>
-
-      <nav class="nav-links" aria-label="Navigasi utama">
-        <a href="{{ url_for('main.index') }}" class="{% if active_page == 'index' %}active{% endif %}">Beranda</a>
-        <a href="{{ url_for('main.about') }}" class="{% if active_page == 'about' %}active{% endif %}">Tentang</a>
-        <a href="{{ url_for('main.index') }}#caraKerja">Cara Kerja</a>
-        <a href="{{ url_for('main.index') }}#formAnalisis">Analisis</a>
-      </nav>
-
-      <button
-        type="button"
-        id="themeToggle"
-        class="theme-toggle-btn"
-        aria-label="Ganti mode gelap atau terang"
-        title="Ganti Mode Gelap / Terang"
-      >
-        <span id="themeIcon" aria-hidden="true">&#9728;</span>
-        <span id="themeLabel">Terang</span>
-      </button>
-    </div>
-  </header>
-
-  <main class="container main-content">
-    {% block content %}{% endblock %}
-  </main>
-
-  <footer class="footer">
-    <div class="container">
-      <p>
-        <strong>Somna.ai</strong> — Klasifikasi Kebiasaan Tidur terhadap Tingkat Produktivitas &amp; Indikasi Gangguan Tidur.
-        Hasil merupakan skrining awal, bukan diagnosis medis.
-      </p>
-    </div>
-  </footer>
-
-  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<body class="bg-white text-slate-800 antialiased min-h-screen selection:bg-teal-500 selection:text-white">
+  {% block content %}{% endblock %}
+  
+  <!-- Client JavaScript Interaction Controller -->
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

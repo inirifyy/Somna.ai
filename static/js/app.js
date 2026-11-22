@@ -373,8 +373,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Bersihkan sisa state dark mode dari browser jika ada
-  try {
-    localStorage.removeItem("somna_theme");
-    document.documentElement.classList.remove("dark");
-  } catch (e) {}
+  // try {
+  //   localStorage.removeItem("somna_theme");
+  //   document.documentElement.classList.remove("dark");
+  // } catch (e) {}
 });

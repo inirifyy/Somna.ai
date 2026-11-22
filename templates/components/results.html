@@ -21,12 +21,12 @@
 
         <!-- PROGRESS METER -->
         <div class="w-full pt-3 flex flex-col gap-2">
-          <div class="w-full flex justify-between items-center text-xs font-medium font-['Inter']">
-            <span id="labelProdRendah" class="text-slate-500">Rendah</span>
-            <span id="labelProdSedang" class="text-teal-700 font-bold">Sedang [Aktif]</span>
-            <span id="labelProdTinggi" class="text-slate-500">Tinggi</span>
+          <div class="w-full flex gap-1.5 px-0.5 items-center text-xs font-medium font-['Inter']">
+            <span id="labelProdRendah" class="flex-1 text-center text-slate-500">Rendah</span>
+            <span id="labelProdSedang" class="flex-1 text-center text-teal-700 font-bold">Sedang</span>
+            <span id="labelProdTinggi" class="flex-1 text-center text-slate-500">Tinggi</span>
           </div>
-          <div class="w-full h-2 p-0.5 bg-slate-100 rounded-full flex gap-1.5 overflow-hidden">
+          <div class="w-full h-2.5 p-0.5 bg-slate-100 rounded-full flex gap-1.5 overflow-hidden">
             <div id="barProdRendah" class="flex-1 bg-slate-200 rounded-sm transition-colors duration-300"></div>
             <div id="barProdSedang" class="flex-1 bg-teal-600 rounded-sm transition-colors duration-300"></div>
             <div id="barProdTinggi" class="flex-1 bg-slate-200 rounded-sm transition-colors duration-300"></div>
@@ -65,13 +65,13 @@
 
         <!-- PROGRESS METER -->
         <div class="w-full pt-3 flex flex-col gap-2">
-          <div class="w-full flex justify-between items-center text-[11px] sm:text-xs font-medium font-['Inter']">
-            <span id="labelInsomNone" class="text-slate-500">Tidak Ada</span>
-            <span id="labelInsomSub" class="text-teal-700 font-bold">Subthreshold</span>
-            <span id="labelInsomSedang" class="text-slate-500">Sedang</span>
-            <span id="labelInsomBerat" class="text-slate-500">Berat</span>
+          <div class="w-full flex gap-1.5 px-0.5 items-center text-[11px] sm:text-xs font-medium font-['Inter']">
+            <span id="labelInsomNone" class="flex-1 text-center text-slate-500">Tidak Ada</span>
+            <span id="labelInsomSub" class="flex-1 text-center text-teal-700 font-bold">Subthreshold</span>
+            <span id="labelInsomSedang" class="flex-1 text-center text-slate-500">Sedang</span>
+            <span id="labelInsomBerat" class="flex-1 text-center text-slate-500">Berat</span>
           </div>
-          <div class="w-full h-2 p-0.5 bg-slate-100 rounded-full flex gap-1.5 overflow-hidden">
+          <div class="w-full h-2.5 p-0.5 bg-slate-100 rounded-full flex gap-1.5 overflow-hidden">
             <div id="barInsomNone" class="flex-1 bg-slate-200 rounded-sm transition-colors duration-300"></div>
             <div id="barInsomSub" class="flex-1 bg-teal-600 rounded-sm transition-colors duration-300"></div>
             <div id="barInsomSedang" class="flex-1 bg-slate-200 rounded-sm transition-colors duration-300"></div>

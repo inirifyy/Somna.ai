@@ -1,1 +1,290 @@
-<!-- Halaman utama dan form pengisian kebiasaan tidur -->
+{% extends "base.html" %}
+{% set active_page = "index" %}
+
+{% block title %}Somna.ai — Analisis Kebiasaan Tidur &amp; Produktivitas{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero-section">
+  <span class="badge-teal">JARINGAN SARAF TIRUAN (JST) &bull; SKRINING AWAL</span>
+  <h1>Pahami Pola Tidur Anda, Tingkatkan Produktivitas.</h1>
+  <p class="hero-subtitle">
+    Ketahui bagaimana kebiasaan tidur memengaruhi produktivitas harian Anda serta kenali indikasi awal gangguan tidur melalui analisis enam variabel kebiasaan tidur berbasis rata-rata tujuh hari terakhir.
+  </p>
+  <div class="hero-actions">
+    <a href="#formAnalisis" class="btn-teal">Mulai Analisis &darr;</a>
+  </div>
+</section>
+
+<!-- CARA KERJA / FITUR UTAMA (3 KARTU PUTIH) -->
+<section id="caraKerja" class="steps-section">
+  <div class="section-header centered">
+    <span class="badge-teal">ALUR SISTEM</span>
+    <h2>Tiga Langkah Menuju Wawasan Tidur Berbasis Sains</h2>
+    <p>Alur kerja inferensi sederhana dari pengisian parameter kebiasaan tidur hingga ringkasan hasil dan saran.</p>
+  </div>
+
+  <div class="steps-grid">
+    <article class="step-card">
+      <div class="step-top">
+        <span class="step-icon" aria-hidden="true">&#9789;</span>
+        <span class="step-num">01</span>
+      </div>
+      <h3>Masukkan Data Anda</h3>
+      <p>Lengkapi enam variabel kebiasaan tidur berdasarkan rata-rata tujuh hari terakhir pada tiga kelompok input.</p>
+      <div class="step-footer-meta">
+        <span>Rata-rata 7 Hari</span>
+        <span class="step-tag">6 Variabel</span>
+      </div>
+    </article>
+
+    <article class="step-card">
+      <div class="step-top">
+        <span class="step-icon" aria-hidden="true">&#9881;</span>
+        <span class="step-num">02</span>
+      </div>
+      <h3>Pemrosesan AI</h3>
+      <p>Data dikirim ke backend untuk diklasifikasikan oleh model JST terhadap produktivitas dan indikasi gangguan tidur.</p>
+      <div class="step-footer-meta">
+        <span>Model JST</span>
+        <span class="step-tag">Otomatis</span>
+      </div>
+    </article>
+
+    <article class="step-card">
+      <div class="step-top">
+        <span class="step-icon" aria-hidden="true">&#10003;</span>
+        <span class="step-num">03</span>
+      </div>
+      <h3>Dapatkan Hasil Anda</h3>
+      <p>Lihat klasifikasi produktivitas, skrining gejala insomnia, tingkat kepercayaan prediksi, faktor utama, dan saran perbaikan.</p>
+      <div class="step-footer-meta">
+        <span>Skrining Awal</span>
+        <span class="step-tag">Rekomendasi</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- FORM 6 VARIABEL DALAM 3 KELOMPOK -->
+<section id="formAnalisis" class="form-section">
+  <div class="section-header centered">
+    <span class="badge-teal">FORM ANALISIS</span>
+    <h2>Input Enam Variabel Kebiasaan Tidur</h2>
+    <p>Isi data berdasarkan kondisi rata-rata 7 hari terakhir. Indikasi gangguan tidur merupakan skrining awal, bukan diagnosis medis.</p>
+  </div>
+
+  <form id="sleepForm" action="/analyze" method="POST" class="form-stack" novalidate>
+    <!-- GRUP 1: POLA TIDUR -->
+    <div class="group-white-card">
+      <div class="group-card-head">
+        <span class="group-icon" aria-hidden="true">&#9789;</span>
+        <h3 class="group-title">Grup 1: Pola Tidur</h3>
+      </div>
+
+      <div class="fields-stack">
+        <div class="field-item">
+          <div class="field-label-row">
+            <label for="durasi_tidur">Durasi Tidur (Jam/Malam)</label>
+            <span id="durasiBadge" class="value-pill">7.0 Jam</span>
+          </div>
+          <input
+            type="range"
+            id="durasi_tidur"
+            name="durasi_tidur"
+            min="0"
+            max="14"
+            step="0.5"
+            value="7.0"
+          />
+          <small class="field-hint">Geser atau atur rata-rata jam tidur per malam (0–14 jam).</small>
+        </div>
+
+        <div class="field-item">
+          <div class="field-label-row">
+            <label for="kesulitan_memulai_tidur">Kesulitan Memulai Tidur (Menit)</label>
+            <span class="value-pill">Latensi Tidur</span>
+          </div>
+          <input
+            type="number"
+            id="kesulitan_memulai_tidur"
+            name="kesulitan_memulai_tidur"
+            min="0"
+            max="300"
+            step="1"
+            placeholder="Contoh: 20"
+            required
+          />
+          <small class="field-hint">Perkiraan waktu yang dibutuhkan hingga tertidur setelah berbaring (menit).</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRUP 2: KONDISI TIDUR -->
+    <div class="group-white-card">
+      <div class="group-card-head">
+        <span class="group-icon" aria-hidden="true">&#9829;</span>
+        <h3 class="group-title">Grup 2: Kondisi Tidur</h3>
+      </div>
+
+      <div class="fields-stack">
+        <div class="field-item">
+          <div class="field-label-row">
+            <label>Kualitas Tidur (Skala 1–5)</label>
+            <span id="kualitasLabel" class="value-pill is-filled">3 — Cukup</span>
+          </div>
+          <input type="hidden" id="kualitas_tidur" name="kualitas_tidur" value="3" />
+          <div
+            class="scale-buttons"
+            data-target="kualitas_tidur"
+            data-display="kualitasLabel"
+            data-labels='{"1":"1 — Sangat Buruk","2":"2 — Buruk","3":"3 — Cukup","4":"4 — Baik","5":"5 — Sangat Baik"}'
+          >
+            <button type="button" class="scale-btn" data-val="1">1</button>
+            <button type="button" class="scale-btn" data-val="2">2</button>
+            <button type="button" class="scale-btn active" data-val="3">3</button>
+            <button type="button" class="scale-btn" data-val="4">4</button>
+            <button type="button" class="scale-btn" data-val="5">5</button>
+          </div>
+          <small class="field-hint">1 = Sangat Buruk, 2 = Buruk, 3 = Cukup, 4 = Baik, 5 = Sangat Baik.</small>
+        </div>
+
+        <div class="field-item">
+          <div class="field-label-row">
+            <label>Tingkat Stres (Skala 1–5)</label>
+            <span id="stresLabel" class="value-pill is-filled">3 — Sedang</span>
+          </div>
+          <input type="hidden" id="tingkat_stres" name="tingkat_stres" value="3" />
+          <div
+            class="scale-buttons"
+            data-target="tingkat_stres"
+            data-display="stresLabel"
+            data-labels='{"1":"1 — Sangat Rendah","2":"2 — Rendah","3":"3 — Sedang","4":"4 — Tinggi","5":"5 — Sangat Tinggi"}'
+          >
+            <button type="button" class="scale-btn" data-val="1">1</button>
+            <button type="button" class="scale-btn" data-val="2">2</button>
+            <button type="button" class="scale-btn active" data-val="3">3</button>
+            <button type="button" class="scale-btn" data-val="4">4</button>
+            <button type="button" class="scale-btn" data-val="5">5</button>
+          </div>
+          <small class="field-hint">1 = Sangat Rendah hingga 5 = Sangat Tinggi selama sepekan terakhir.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRUP 3: GAYA HIDUP -->
+    <div class="group-white-card">
+      <div class="group-card-head">
+        <span class="group-icon" aria-hidden="true">&#9889;</span>
+        <h3 class="group-title">Grup 3: Gaya Hidup</h3>
+      </div>
+
+      <div class="fields-stack">
+        <div class="field-item">
+          <div class="field-label-row">
+            <label for="aktivitas_fisik">Aktivitas Fisik (Menit/Hari)</label>
+            <span class="value-pill">Gerak Harian</span>
+          </div>
+          <input
+            type="number"
+            id="aktivitas_fisik"
+            name="aktivitas_fisik"
+            min="0"
+            max="600"
+            step="1"
+            placeholder="Contoh: 30"
+            required
+          />
+          <small class="field-hint">Rata-rata durasi olahraga atau aktivitas fisik harian (menit/hari).</small>
+        </div>
+
+        <div class="field-item">
+          <div class="field-label-row">
+            <label for="penggunaan_ponsel">Penggunaan Ponsel Sebelum Tidur (Menit)</label>
+            <span class="value-pill">Maks. 60 Menit</span>
+          </div>
+          <input
+            type="number"
+            id="penggunaan_ponsel"
+            name="penggunaan_ponsel"
+            min="0"
+            max="60"
+            step="1"
+            placeholder="0–60 menit"
+            required
+          />
+          <small class="field-hint">Dihitung dalam 1 jam sebelum tidur (rentang 0–60 menit).</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- KARTU AKSI SUBMIT -->
+    <div class="submit-white-card">
+      <p class="submit-note">
+        <span class="info-dot" aria-hidden="true">i</span>
+        <span>Pastikan seluruh enam variabel telah terisi sesuai rata-rata 7 hari terakhir sebelum menjalankan analisis.</span>
+      </p>
+      <button type="submit" id="btnSubmit" class="btn-teal btn-full-card">Analisis Kebiasaan Tidur</button>
+    </div>
+
+    <div id="formError" class="error-box hidden" role="alert"></div>
+
+    <div id="loadingBox" class="loading-box hidden" aria-live="polite">
+      <span class="spinner" aria-hidden="true"></span>
+      <span>Sedang memproses data kebiasaan tidur dan menjalankan inferensi...</span>
+    </div>
+  </form>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/form.js') }}"></script>
+{% endblock %}
+
+<!-- KUALITAS TIDUR -->
+<div class="field-item">
+  <div class="field-label-row">
+    <label>Kualitas Tidur (Skala 1–5)</label>
+    <span id="kualitasLabel" class="value-pill">Belum dipilih</span>
+  </div>
+  <input type="hidden" id="kualitas_tidur" name="kualitas_tidur" value="" />
+  <div
+    class="scale-buttons"
+    data-target="kualitas_tidur"
+    data-display="kualitasLabel"
+    data-labels='{"1":"1 — Sangat Buruk","2":"2 — Buruk","3":"3 — Cukup","4":"4 — Baik","5":"5 — Sangat Baik"}'
+  >
+    <button type="button" class="scale-btn" data-val="1">1</button>
+    <button type="button" class="scale-btn" data-val="2">2</button>
+    <button type="button" class="scale-btn" data-val="3">3</button>
+    <button type="button" class="scale-btn" data-val="4">4</button>
+    <button type="button" class="scale-btn" data-val="5">5</button>
+  </div>
+  <small class="field-hint">1 = Sangat Buruk, 2 = Buruk, 3 = Cukup, 4 = Baik, 5 = Sangat Baik.</small>
+</div>
+
+<!-- TINGKAT STRES -->
+<div class="field-item">
+  <div class="field-label-row">
+    <label>Tingkat Stres (Skala 1–5)</label>
+    <span id="stresLabel" class="value-pill">Belum dipilih</span>
+  </div>
+  <input type="hidden" id="tingkat_stres" name="tingkat_stres" value="" />
+  <div
+    class="scale-buttons"
+    data-target="tingkat_stres"
+    data-display="stresLabel"
+    data-labels='{"1":"1 — Sangat Rendah","2":"2 — Rendah","3":"3 — Sedang","4":"4 — Tinggi","5":"5 — Sangat Tinggi"}'
+  >
+    <button type="button" class="scale-btn" data-val="1">1</button>
+    <button type="button" class="scale-btn" data-val="2">2</button>
+    <button type="button" class="scale-btn" data-val="3">3</button>
+    <button type="button" class="scale-btn" data-val="4">4</button>
+    <button type="button" class="scale-btn" data-val="5">5</button>
+  </div>
+  <small class="field-hint">1 = Sangat Rendah hingga 5 = Sangat Tinggi selama sepekan terakhir.</small>
+</div>

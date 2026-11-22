@@ -285,24 +285,24 @@ document.addEventListener("DOMContentLoaded", () => {
         if (b) b.className = "flex-1 bg-slate-200 rounded-sm transition-colors duration-300";
       });
       [labelProdR, labelProdS, labelProdT].forEach((l) => {
-        if (l) l.className = "text-slate-500";
+        if (l) l.className = "flex-1 text-center text-slate-500";
       });
 
       if (prodStatus === "Tinggi") {
         if (barProdT) barProdT.className = "flex-1 bg-teal-600 rounded-sm transition-colors duration-300";
-        if (labelProdT) labelProdT.className = "text-teal-700 font-bold";
+        if (labelProdT) labelProdT.className = "flex-1 text-center text-teal-700 font-bold";
         if (descProd)
           descProd.textContent =
             "Pola tidur Anda sangat teratur dan mendukung pemulihan fungsi kognitif maksimal untuk produktivitas optimal sepanjang hari.";
       } else if (prodStatus === "Rendah") {
         if (barProdR) barProdR.className = "flex-1 bg-amber-500 rounded-sm transition-colors duration-300";
-        if (labelProdR) labelProdR.className = "text-amber-700 font-bold";
+        if (labelProdR) labelProdR.className = "flex-1 text-center text-amber-700 font-bold";
         if (descProd)
           descProd.textContent =
             "Pola tidur Anda saat ini belum optimal dalam menunjang stamina kognitif harian. Diperlukan penyesuaian jam tidur dan pengurangan stres.";
       } else {
         if (barProdS) barProdS.className = "flex-1 bg-teal-600 rounded-sm transition-colors duration-300";
-        if (labelProdS) labelProdS.className = "text-teal-700 font-bold";
+        if (labelProdS) labelProdS.className = "flex-1 text-center text-teal-700 font-bold";
         if (descProd)
           descProd.textContent =
             "Pola tidur Anda saat ini mendukung tingkat produktivitas yang cukup stabil, namun variasi durasi tidur dan aktivitas malam dapat ditingkatkan.";
@@ -330,30 +330,30 @@ document.addEventListener("DOMContentLoaded", () => {
         if (b) b.className = "flex-1 bg-slate-200 rounded-sm transition-colors duration-300";
       });
       [labelInsomNone, labelInsomSub, labelInsomSedang, labelInsomBerat].forEach((l) => {
-        if (l) l.className = "text-slate-500";
+        if (l) l.className = "flex-1 text-center text-slate-500";
       });
 
       if (insomniaStatus === "Tidak Ada Gejala") {
         if (barInsomNone) barInsomNone.className = "flex-1 bg-teal-600 rounded-sm transition-colors duration-300";
-        if (labelInsomNone) labelInsomNone.className = "text-teal-700 font-bold";
+        if (labelInsomNone) labelInsomNone.className = "flex-1 text-center text-teal-700 font-bold";
         if (descInsom)
           descInsom.textContent =
             "Tidak ditemukan indikasi signifikan gangguan insomnia. Ritme sirkadian dan waktu latensi onset tidur Anda berada dalam batas sehat.";
       } else if (insomniaStatus === "Subthreshold") {
         if (barInsomSub) barInsomSub.className = "flex-1 bg-teal-600 rounded-sm transition-colors duration-300";
-        if (labelInsomSub) labelInsomSub.className = "text-teal-700 font-bold";
+        if (labelInsomSub) labelInsomSub.className = "flex-1 text-center text-teal-700 font-bold";
         if (descInsom)
           descInsom.textContent =
             "Indikasi awal menunjukkan adanya gejala subthreshold (ringan) yang umumnya dipicu oleh sleep latency di atas 20 menit dan paparan layar malam.";
       } else if (insomniaStatus === "Sedang") {
         if (barInsomSedang) barInsomSedang.className = "flex-1 bg-amber-500 rounded-sm transition-colors duration-300";
-        if (labelInsomSedang) labelInsomSedang.className = "text-amber-700 font-bold";
+        if (labelInsomSedang) labelInsomSedang.className = "flex-1 text-center text-amber-700 font-bold";
         if (descInsom)
           descInsom.textContent =
             "Terdapat indikasi gejala insomnia tingkat sedang yang mulai mempengaruhi kenyamanan istirahat Anda. Disarankan menerapkan jadwal tidur konsisten.";
       } else {
         if (barInsomBerat) barInsomBerat.className = "flex-1 bg-rose-500 rounded-sm transition-colors duration-300";
-        if (labelInsomBerat) labelInsomBerat.className = "text-rose-700 font-bold";
+        if (labelInsomBerat) labelInsomBerat.className = "flex-1 text-center text-rose-700 font-bold";
         if (descInsom)
           descInsom.textContent =
             "Menunjukkan indikasi gejala insomnia tingkat tinggi dengan beban stres dan latensi onset tinggi. Disarankan berkonsultasi ke tenaga kesehatan profesional.";
@@ -371,4 +371,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // Bersihkan sisa state dark mode dari browser jika ada
+  try {
+    localStorage.removeItem("somna_theme");
+    document.documentElement.classList.remove("dark");
+  } catch (e) {}
 });

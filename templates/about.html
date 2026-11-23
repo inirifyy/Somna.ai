@@ -1,1 +1,45 @@
-	<!-- Halaman informasi mengenai Somna.ai dan cara kerja sistem -->
+{% extends "base.html" %}
+{% set active_page = "about" %}
+
+{% block title %}Somna.ai — Tentang Sistem{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/result.css') }}" />
+{% endblock %}
+
+{% block content %}
+<section class="info-panel">
+  <span class="badge-teal">TENTANG SOMNA.AI</span>
+  <h1>Tentang Aplikasi Somna.ai</h1>
+  <p class="card-desc">
+    Somna.ai mengklasifikasikan kebiasaan tidur terhadap tingkat produktivitas dan melakukan skrining indikasi gejala insomnia menggunakan metode Jaringan Saraf Tiruan (JST).
+  </p>
+
+  <div class="rec-stack" style="margin-top: 18px;">
+    <div class="rec-card">
+      <h3>Enam Variabel Input (X)</h3>
+      <ul class="bullet-list">
+        <li>Durasi tidur (jam/malam, rata-rata 7 hari terakhir)</li>
+        <li>Kesulitan memulai tidur (menit hingga tertidur)</li>
+        <li>Kualitas tidur (skala 1–5)</li>
+        <li>Tingkat stres (skala 1–5)</li>
+        <li>Aktivitas fisik (menit/hari)</li>
+        <li>Penggunaan ponsel sebelum tidur (menit dalam 1 jam, maks. 60 menit)</li>
+      </ul>
+    </div>
+
+    <div class="rec-card">
+      <h3>Dua Target Keluaran (Y)</h3>
+      <ul class="bullet-list">
+        <li><strong>Tingkat Produktivitas:</strong> Rendah, Sedang, Tinggi</li>
+        <li><strong>Indikasi Gangguan Tidur:</strong> Tidak terindikasi, Indikasi ringan, Indikasi sedang, Indikasi berat</li>
+        <li>Disertai tingkat kepercayaan prediksi, faktor utama, analisis terpadu, dan rekomendasi perbaikan tidur.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="disclaimer-box">
+    <strong>Catatan Skrining:</strong> Informasi dan hasil pada Somna.ai bersifat skrining awal dan edukatif, <strong>bukan diagnosis medis</strong>.
+  </div>
+</section>
+{% endblock %}

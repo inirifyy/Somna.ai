@@ -1,1 +1,28 @@
-	/* Mengatur tampilan untuk mobile dan desktop */
+@media (max-width: 720px) {
+  .topbar-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 0;
+  }
+
+  .hero-section {
+    padding: 20px 8px 16px;
+  }
+
+  .step-card,
+  .group-white-card,
+  .submit-white-card,
+  .result-top-bar,
+  .result-card,
+  .info-panel {
+    padding: 18px;
+  }
+
+  .result-top-bar {
+    flex-direction: column;
+  }
+
+  .scale-buttons {
+    gap: 6px;
+  }
+}

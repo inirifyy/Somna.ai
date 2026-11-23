@@ -1,1 +1,128 @@
-	<!-- Halaman hasil inferensi AI -->
+{% extends "base.html" %}
+{% set active_page = "result" %}
+
+{% block title %}Somna.ai — Hasil Inferensi{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/result.css') }}" />
+{% endblock %}
+
+{% block content %}
+<section
+  id="resultView"
+  class="result-wrapper"
+  data-jinja-prod-label="{{ produktivitas_label if produktivitas_label is defined else '' }}"
+  data-jinja-prod-conf="{{ produktivitas_confidence if produktivitas_confidence is defined else '' }}"
+  data-jinja-insomnia-label="{{ insomnia_label if insomnia_label is defined else '' }}"
+  data-jinja-insomnia-conf="{{ insomnia_confidence if insomnia_confidence is defined else '' }}"
+  data-jinja-analysis="{{ analisis_terpadu if analisis_terpadu is defined else '' }}"
+>
+  <div class="result-top-bar">
+    <div>
+      <span class="badge-teal">HASIL INFERENSI</span>
+      <h1>Hasil Inferensi Kebiasaan Tidur</h1>
+      <p>Klasifikasi produktivitas, skrining indikasi gejala insomnia, tingkat kepercayaan prediksi, faktor utama, analisis terpadu, dan saran perbaikan.</p>
+    </div>
+    <a href="{{ url_for('main.index') }}#formAnalisis" class="btn-outline-teal">&larr; Analisis Ulang</a>
+  </div>
+
+  <!-- KARTU 1: KLASIFIKASI PRODUKTIVITAS -->
+  <article class="result-card">
+    <div class="card-top">
+      <div class="card-title-group">
+        <span class="card-icon" aria-hidden="true">&#9670;</span>
+        <h2>Klasifikasi Produktivitas</h2>
+      </div>
+      <span id="prodBadge" class="status-pill">-</span>
+    </div>
+    <p class="card-desc">
+      Menunjukkan kategori tingkat produktivitas harian berdasarkan kebiasaan tidur dan gaya hidup.
+    </p>
+
+    <div class="level-pills" id="prodLevels">
+      <span class="level-chip">Rendah</span>
+      <span class="level-chip">Sedang</span>
+      <span class="level-chip">Tinggi</span>
+    </div>
+
+    <div class="conf-block">
+      <div class="conf-row">
+        <span>Tingkat Kepercayaan Prediksi</span>
+        <strong id="prodConfText">0%</strong>
+      </div>
+      <div class="progress-track">
+        <div id="prodConfBar" class="progress-fill" style="width: 0%;"></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- KARTU 2: SKRINING GEJALA INSOMNIA -->
+  <article class="result-card">
+    <div class="card-top">
+      <div class="card-title-group">
+        <span class="card-icon" aria-hidden="true">&#9789;</span>
+        <h2>Skrining Gejala Insomnia</h2>
+      </div>
+      <span id="insomniaBadge" class="status-pill">-</span>
+    </div>
+    <p class="card-desc">
+      Hasil skrining awal indikasi tingkat keparahan gejala insomnia (bukan diagnosis medis).
+    </p>
+
+    <div class="level-pills" id="insomniaLevels">
+      <span class="level-chip">Tidak Ada Gejala</span>
+      <span class="level-chip">Subthreshold</span>
+      <span class="level-chip">Sedang</span>
+      <span class="level-chip">Berat</span>
+    </div>
+
+    <div class="conf-block">
+      <div class="conf-row">
+        <span>Tingkat Kepercayaan Prediksi</span>
+        <strong id="insomniaConfText">0%</strong>
+      </div>
+      <div class="progress-track">
+        <div id="insomniaConfBar" class="progress-fill" style="width: 0%;"></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ANALISIS TERPADU & FAKTOR YANG MEMENGARUHI HASIL -->
+  <article class="info-panel">
+    <div class="card-title-group">
+      <span class="card-icon" aria-hidden="true">&#9776;</span>
+      <h2>Analisis Terpadu</h2>
+    </div>
+    <p id="unifiedAnalysis" class="card-desc">
+      Memuat ringkasan keterkaitan antara kebiasaan tidur, indikasi gangguan tidur, dan tingkat produktivitas...
+    </p>
+
+    <h3 class="sub-section-title">Faktor yang Memengaruhi Hasil</h3>
+    <div id="factorsGrid" class="rec-stack"></div>
+  </article>
+
+  <!-- SARAN UNTUK KUALITAS TIDUR LEBIH BAIK -->
+  <article class="info-panel">
+    <div class="card-title-group">
+      <span class="card-icon" aria-hidden="true">&#10003;</span>
+      <h2>Saran untuk Kualitas Tidur Lebih Baik</h2>
+    </div>
+    <p class="sub-muted">Langkah praktis berbasis kebiasaan tidur untuk mendukung pemulihan dan produktivitas harian.</p>
+    <div id="recommendationGrid" class="rec-stack"></div>
+  </article>
+
+  <div class="disclaimer-box">
+    <strong>Catatan Skrining:</strong> Indikasi tingkat keparahan gejala insomnia pada sistem ini merupakan skrining awal, <strong>bukan diagnosis medis</strong>.
+  </div>
+</section>
+
+<section id="emptyState" class="info-panel hidden">
+  <h2>Belum Ada Data Hasil Inferensi</h2>
+  <p>Silakan lengkapi form kebiasaan tidur terlebih dahulu untuk melihat hasil analisis.</p>
+  <a href="{{ url_for('main.index') }}#formAnalisis" class="btn-teal">Ke Form Kebiasaan Tidur</a>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/result.js') }}"></script>
+{% endblock %}

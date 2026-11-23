@@ -5,19 +5,21 @@
 
 import math
 
+FREKUENSI = ["Tidak", "Jarang", "Sering", "Selalu"]
+
 # ---------------------------------------------------------------------------
-# TABEL ATURAN INPUT  (SEMENTARA - skala belum disepakati kelompok)
-# Kunci ("sleep_difficulty", dst.) = atribut name di HTML form milik Inri.
-# Kalau kelompok mengubah skala, cukup ubah tabel ini.
+# TABEL ATURAN INPUT
+# Kunci = atribut name di HTML form (harus sama persis dengan milik Inri).
+# tipe "pilihan" = harus salah satu dari daftar "opsi".
 # ---------------------------------------------------------------------------
 FIELD_SPECS = {
-    "sleep_difficulty": {"label": "Kesulitan tidur malam",       "tipe": "int",   "min": 1,   "max": 5},
-    "sleep_duration":   {"label": "Durasi tidur (jam)",          "tipe": "float", "min": 2,   "max": 12},
-    "sleep_quality":    {"label": "Kualitas tidur",              "tipe": "int",   "min": 1,   "max": 5},
-    "phone_before_bed": {"label": "Ponsel sebelum tidur",        "tipe": "int",   "min": 1,   "max": 5},
-    "caffeine_freq":    {"label": "Frekuensi konsumsi kafein",   "tipe": "int",   "min": 1,   "max": 5},
-    "physical_activity": {"label": "Aktivitas fisik (menit/hari)", "tipe": "int", "min": 0,   "max": 240},
-    "stress_level":     {"label": "Tingkat stres",               "tipe": "int",   "min": 1,   "max": 5},
+    "durasi_tidur":        {"label": "Durasi tidur (jam)",         "tipe": "float",   "min": 2, "max": 12},
+    "kualitas_tidur":      {"label": "Kualitas tidur",             "tipe": "int",     "min": 1, "max": 10},
+    "aktivitas_fisik":     {"label": "Aktivitas fisik (menit)",    "tipe": "int",     "min": 0, "max": 240},
+    "tingkat_stres":       {"label": "Tingkat stres",              "tipe": "int",     "min": 1, "max": 10},
+    "layar_sebelum_tidur": {"label": "Layar sebelum tidur",        "tipe": "pilihan", "opsi": FREKUENSI},
+    "konsumsi_kafein":     {"label": "Konsumsi kafein",            "tipe": "pilihan", "opsi": FREKUENSI},
+    "kesulitan_tidur":     {"label": "Kesulitan tidur malam",      "tipe": "pilihan", "opsi": FREKUENSI},
 }
 
 
@@ -46,12 +48,9 @@ def validate_input(form):
     """
     Memeriksa semua input.
 
-    Parameter:
-        form : data dari form, bisa request.form (Flask) atau dict biasa.
-
     Mengembalikan dua hal:
-        data   : dict berisi angka yang sudah bersih (hanya valid jika errors kosong)
-        errors : dict berisi pesan kesalahan per field (kosong = semua valid)
+        data   : dict nilai yang sudah bersih (valid hanya jika errors kosong)
+        errors : dict pesan kesalahan per field (kosong = semua valid)
     """
     data = {}
     errors = {}
@@ -65,7 +64,15 @@ def validate_input(form):
             errors[nama] = f"{label} wajib diisi."
             continue
 
-        # 2. Bisa jadi angka (dan bilangan bulat kalau wajib)?
+        # 2a. Pilihan teks: harus salah satu opsi
+        if aturan["tipe"] == "pilihan":
+            if teks not in aturan["opsi"]:
+                errors[nama] = f"{label} harus salah satu dari: {', '.join(aturan['opsi'])}."
+                continue
+            data[nama] = teks
+            continue
+
+        # 2b. Angka: bisa diubah, dan bilangan bulat kalau wajib?
         nilai = _ubah_ke_angka(teks, aturan["tipe"])
         if nilai is None:
             if aturan["tipe"] == "int":
@@ -76,8 +83,7 @@ def validate_input(form):
 
         # 3. Di dalam rentang?
         if nilai < aturan["min"] or nilai > aturan["max"]:
-            errors[nama] = (f"{label} harus antara "
-                            f"{aturan['min']} dan {aturan['max']}.")
+            errors[nama] = f"{label} harus antara {aturan['min']} dan {aturan['max']}."
             continue
 
         data[nama] = nilai

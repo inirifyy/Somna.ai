@@ -20,8 +20,7 @@ Aplikasi web berbasis AI untuk **klasifikasi kebiasaan tidur terhadap tingkat pr
 10. [Keluaran Sistem](#keluaran-sistem)
 11. [Dataset](#dataset)
 12. [Troubleshooting](#troubleshooting)
-13. [Status & Rencana Lanjutan](#status--rencana-lanjutan)
-14. [Tim](#tim)
+13. [Tim](#tim)
 
 ---
 

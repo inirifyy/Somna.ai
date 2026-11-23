@@ -370,31 +370,6 @@ Tailwind dimuat dari CDN — butuh koneksi internet. Jika offline, styling tidak
 python -c "from app import create_app; create_app().run(port=5001)"
 ```
 
----
-
-## Status & Rencana Lanjutan
-
-Sudah berjalan:
-
-- [x] Dua model JST terlatih + scaler (`models/`)
-- [x] Validasi input backend (`validators.py`)
-- [x] Inferensi + hybrid scoring (`prediction.py`)
-- [x] Routing HTML & JSON (`routes.py`)
-- [x] UI lengkap: landing, form 3 grup, hasil, tentang, halaman error
-- [x] Notifikasi error validasi dikembalikan ke form
-
-Belum selesai:
-
-- [ ] `backend/recommendation.py` — rekomendasi masih statis di template, belum *rule-based* dinamis
-- [ ] `backend/preprocessing.py` — masih placeholder
-- [ ] `tests/` — masih kosong; disarankan uji `validators`, `preprocessing`, dan endpoint
-- [ ] `models/*_labels.json` — masih kosong
-- [ ] `static/images/favicon.ico`, `logo.png` — masih kosong
-- [ ] `dataset/raw/*.csv` — perlu diunduh ulang untuk reproduksi training
-- [ ] Evaluasi model terdokumentasi (confusion matrix, akurasi/loss) di `notebooks/05_model_evaluation.ipynb`
-
----
-
 ## Tim
 
 | Anggota | Peran |

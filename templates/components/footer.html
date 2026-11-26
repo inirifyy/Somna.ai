@@ -1,62 +1,57 @@
 <!-- FOOTER -->
-<footer id="footer" style="background-color: #ffffff; color: #cbd5e1; padding: 32px 20px 44px 20px;" class="w-full">
-  <div style="max-width: 1180px; margin: 0 auto; background-color: #090e1a; border: 1px solid rgba(45, 212, 191, 0.25); border-radius: 28px; box-shadow: 0 24px 60px -15px rgba(9, 14, 26, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.04) inset; overflow: hidden;">
+<footer id="footer" class="w-full bg-white">
+  <!-- PEMBATAS GELOMBANG ORGANIK (TRANSISI MAIN CONTENT KE FOOTER) -->
+  <div class="w-full overflow-hidden leading-none bg-white">
+    <svg viewBox="0 0 1440 90" fill="none" xmlns="http://www.w3.org/2000/svg" class="block w-full h-14 sm:h-20" preserveAspectRatio="none">
+      <!-- Lapisan gelombang belakang (mint lembut transparan) -->
+      <path d="M0 32C280 72 560 8 880 42C1140 70 1320 26 1440 44V90H0V32Z" fill="#CCFBF1" fill-opacity="0.65" />
+      <!-- Lapisan gelombang tengah (aksen teal sangat halus) -->
+      <path d="M0 48C340 16 680 76 1040 40C1240 20 1360 36 1440 48V90H0V48Z" fill="#99F6E4" fill-opacity="0.3" />
+      <!-- Lapisan gelombang depan (menyatu dengan background footer) -->
+      <path d="M0 54C360 28 720 82 1100 48C1280 32 1380 44 1440 54V90H0V54Z" fill="#F7FBFA" />
+    </svg>
+  </div>
 
-    <!-- Gelombang halus -->
-    <div style="width: 100%; line-height: 0; background-color: #ffffff;">
-      <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: block; width: 100%; height: 64px;" preserveAspectRatio="none">
-        <path d="M0 24C220 84 460 6 740 52C1020 98 1240 24 1440 62V120H0V24Z" fill="#0d9488" fill-opacity="0.28" />
-        <path d="M0 44C280 12 580 92 920 48C1160 18 1320 42 1440 58V120H0V44Z" fill="#14b8a6" fill-opacity="0.45" />
-        <path d="M0 64C320 34 640 96 980 56C1200 30 1340 52 1440 68V120H0V64Z" fill="#090e1a" />
-      </svg>
-    </div>
+  <!-- KONTEN UTAMA FOOTER -->
+  <div class="w-full bg-[#F7FBFA] pt-8 pb-10 px-6 sm:px-8">
+    <div class="w-full max-w-6xl mx-auto flex flex-col gap-9">
 
-    <!-- Isi utama footer melayang (letak disamakan dengan Figma) -->
-    <div style="padding: 24px 32px 32px 32px; background-color: #090e1a;" class="w-full flex flex-col gap-9">
-
-      <!-- BARIS 1: KIRI (SOMNA.AI • JST SLEEP RESEARCH) & KANAN (NAV LINKS) -->
-      <div style="border-bottom: 1px solid rgba(148, 163, 184, 0.16);" class="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-7">
-        <a href="#hero" style="text-decoration: none;" class="inline-flex items-center gap-2.5 group">
-          <span style="display: inline-flex; align-items: flex-end; gap: 2px; height: 18px;">
-            <span style="width: 4px; height: 7px; background-color: #2dd4bf; border-radius: 1px;"></span>
-            <span style="width: 4px; height: 12px; background-color: #2dd4bf; border-radius: 1px;"></span>
-            <span style="width: 4px; height: 17px; background-color: #ffffff; border-radius: 1px;"></span>
+      <!-- BARIS 1: KIRI (SOMNA.AI • RISET TIDUR JST) & KANAN (NAV LINKS) -->
+      <div class="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-7 border-b border-slate-200/80">
+        <a href="#hero" class="inline-flex items-center gap-2.5 group">
+          <span class="text-2xl sm:text-3xl font-bold font-['Inter'] tracking-tight">
+            <span class="text-slate-900 group-hover:text-teal-700 transition-colors">Somna</span><span class="text-teal-600 font-extrabold">.ai</span>
           </span>
-          <span style="color: #ffffff;" class="text-base sm:text-lg font-bold font-['Inter'] tracking-tight">Somna.ai</span>
-          <span style="color: #94a3b8;" class="text-sm sm:text-base font-normal font-['Inter']">&bull; JST Sleep Research</span>
         </a>
 
-        <nav aria-label="Navigasi Footer" class="flex flex-wrap items-center gap-6 sm:gap-8 text-sm sm:text-base font-medium font-['Inter']">
-          <a href="#hero" style="color: #e2e8f0; text-decoration: none;" class="hover:text-teal-400 transition-colors">Home</a>
-          <a href="#fitur" style="color: #e2e8f0; text-decoration: none;" class="hover:text-teal-400 transition-colors">About</a>
-          <a href="#caraKerja" style="color: #e2e8f0; text-decoration: none;" class="hover:text-teal-400 transition-colors">How It Works</a>
-          <a href="#formAnalisis" style="color: #e2e8f0; text-decoration: none;" class="hover:text-teal-400 transition-colors">Analysis</a>
-          <a href="#hasilInferensi" style="color: #e2e8f0; text-decoration: none;" class="hover:text-teal-400 transition-colors">Results</a>
+        <nav aria-label="Navigasi Footer" class="flex flex-wrap items-center gap-6 sm:gap-8 text-sm sm:text-base font-medium font-['Inter'] text-slate-600">
+          <a href="#hero" class="hover:text-teal-600 transition-colors">Beranda</a>
+          <a href="#fitur" class="hover:text-teal-600 transition-colors">Tentang</a>
+          <a href="#caraKerja" class="hover:text-teal-600 transition-colors">Cara Kerja</a>
+          <a href="#formAnalisis" class="hover:text-teal-600 transition-colors">Analisis</a>
+          <a href="#hasilInferensi" class="hover:text-teal-600 transition-colors">Hasil</a>
         </nav>
       </div>
 
       <!-- BARIS 2: KIRI (DESKRIPSI PROYEK) & KANAN (KARTU DISCLAIMER MEDIS) -->
       <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
         <div>
-          <p style="color: #cbd5e1;" class="text-sm sm:text-base font-normal font-['Inter'] leading-relaxed max-w-xl m-0">
+          <p class="text-slate-600 text-sm sm:text-base font-normal font-['Inter'] leading-relaxed max-w-xl">
             Proyek klasifikasi kebiasaan tidur terhadap tingkat produktivitas dan indikasi gangguan tidur menggunakan Jaringan Saraf Tiruan (JST). Didukung arsitektur Dual-Head Multi-Layer Perceptron (MLP) untuk inferensi statistik multi-variabel.
           </p>
         </div>
 
-        <div style="background: linear-gradient(145deg, #111c2e 0%, #0d1524 100%); border: 1px solid rgba(45, 212, 191, 0.25);" class="p-6 rounded-2xl">
-          <p style="color: #cbd5e1;" class="text-sm sm:text-base font-normal font-['Inter'] leading-relaxed m-0">
-            <strong style="color: #2dd4bf;" class="font-bold">Disclaimer Medis:</strong> Hasil analisis ini merupakan informasi edukatif dan skrining awal berbasis model Jaringan Saraf Tiruan (JST), bukan merupakan diagnosis medis klinis. Konsultasikan dengan dokter spesialis atau tenaga medis profesional untuk evaluasi klinis komprehensif.
+        <div class="p-6 bg-white rounded-2xl border border-slate-200/90 shadow-2xs">
+          <p class="text-slate-600 text-sm sm:text-base font-normal font-['Inter'] leading-relaxed">
+            <strong class="text-slate-900 font-bold">Disclaimer Medis:</strong> Hasil analisis ini merupakan informasi edukatif dan skrining awal berbasis model Jaringan Saraf Tiruan (JST), bukan merupakan diagnosis medis klinis. Konsultasikan dengan dokter spesialis atau tenaga medis profesional untuk evaluasi klinis komprehensif.
           </p>
         </div>
       </div>
 
-      <!-- BARIS 3: KIRI (COPYRIGHT) & KANAN (MODEL INFO) BERWARNA -->
-      <div style="border-top: 1px solid rgba(45, 212, 191, 0.22);" class="w-full pt-7 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs sm:text-sm font-['JetBrains_Mono']">
-        <div style="color: #5eead4; font-weight: 500;">
-          &copy; 2025 Somna.ai Sleep Research Lab. All rights reserved.
-        </div>
-        <div style="color: #38bdf8; font-weight: 500;">
-          Dual MLP Model Architecture v2.4
+      <!-- BARIS 3: KIRI (HAK CIPTA) & KANAN (INFO MODEL) -->
+      <div class="w-full pt-7 border-t border-slate-200/80 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs sm:text-sm font-['JetBrains_Mono']">
+        <div class="text-slate-500 font-medium">
+          &copy; 2025 Lab Riset Tidur Somna.ai. Hak cipta dilindungi undang-undang.
         </div>
       </div>
 

@@ -19,8 +19,9 @@ Aplikasi web berbasis AI untuk **klasifikasi kebiasaan tidur terhadap tingkat pr
 9. [Kontrak Input Form](#kontrak-input-form)
 10. [Keluaran Sistem](#keluaran-sistem)
 11. [Dataset](#dataset)
-12. [Troubleshooting](#troubleshooting)
-13. [Tim](#tim)
+12. [Retraining Model (Data Riwayat)](#retraining-model-data-riwayat)
+13. [Troubleshooting](#troubleshooting)
+14. [Tim](#tim)
 
 ---
 
@@ -49,7 +50,7 @@ POST /analyze  ──►  backend/validators.py  (validasi + konversi tipe)
         │
         ▼
 backend/prediction.py
-   ├─ Model 1 (Insomnia)      : 4 fitur  ──► probabilitas ──► + adjustment ──► skor 0–100
+   ├─ Model 1 (Insomnia)      : 4 fitur  ──► probabilitas ──► skor 0–100
    └─ Model 2 (Produktivitas) : 5 fitur  ──► kelas 3 kategori + confidence
         │
         ▼
@@ -62,20 +63,11 @@ result.html  (render via Jinja2)
 Detail:
 
 1. **Validasi** — `validators.py` memeriksa tipe, rentang, dan pilihan tiap field. Input dari form maupun JSON diperlakukan sama (validasi JavaScript bisa dilewati, jadi backend wajib memeriksa ulang).
-2. **Model 1 (Insomnia)** — input `[durasi_tidur, kualitas_tidur, aktivitas_fisik, tingkat_stres]` di-*clip* ke rentang data training, lalu di-*scale* dan diprediksi. Hasilnya probabilitas insomnia (0–100%).
-3. **Hybrid Scoring** — probabilitas Model 1 ditambah *adjustment* dari frekuensi kesulitan tidur (variabel yang tidak ada di dataset publik):
-
-   | Kesulitan tidur | Adjustment |
-   | :--- | :--- |
-   | Tidak / Jarang | +0% |
-   | Sering | +10% |
-   | Selalu | +20% |
-
-   `skor_akhir = clip(prob_jst + adjustment, 0, 100)`
+2. **Model 1 (Insomnia)** — input `[durasi_tidur, kualitas_tidur, aktivitas_fisik, tingkat_stres]` di-*clip* ke rentang data training, lalu di-*scale* dan diprediksi. Hasilnya probabilitas insomnia (0–100%) yang **langsung dipakai** sebagai skor (tanpa adjustment hybrid).
 
    Pemetaan kategori: `<25` Tidak Ada Gejala · `25–50` Subthreshold · `51–75` Sedang · `>75` Berat.
-4. **Model 2 (Produktivitas)** — input `[sleep_hours, phone_usage_hours, coffee_intake_mg, exercise_minutes, stress_level]`, hasil berupa kelas + confidence.
-5. **Analisis terpadu** — narasi gabungan kedua model beserta daftar pemicu (durasi tidur pendek, kualitas rendah, aktivitas minim, layar/kafein/kesulitan tidur sering).
+3. **Model 2 (Produktivitas)** — input `[sleep_hours, phone_usage_hours, coffee_intake_mg, exercise_minutes, stress_level]`, hasil berupa kelas + confidence.
+4. **Analisis terpadu** — narasi gabungan kedua model beserta daftar pemicu (durasi tidur pendek, kualitas rendah, aktivitas minim, layar/kafein/kesulitan tidur sering).
 
 ---
 
@@ -117,13 +109,14 @@ Pemetaan pilihan form ke angka untuk Model 2:
 somna.ai/
 ├── app.py                      # Entry point (application factory)
 ├── config.py                   # Konfigurasi Flask (SECRET_KEY, DEBUG)
+├── retrain.py                  # Retraining model dari data riwayat (CLI)
 ├── requirements.txt            # Dependensi Python
 ├── prd_somna_ai_final_v2_0.md  # Product Requirements Document
 │
 ├── backend/
 │   ├── routes.py               # Blueprint: /, /about, /analyze, /api/analyze
 │   ├── validators.py           # Validasi + konversi input form
-│   ├── prediction.py           # Load model, inferensi JST, hybrid scoring
+│   ├── prediction.py           # Load model, inferensi JST, analisis terpadu
 │   ├── preprocessing.py        # Placeholder utilitas pra-pemodelan
 │   └── recommendation.py       # Placeholder engine rekomendasi (rule-based)
 │
@@ -131,11 +124,13 @@ somna.ai/
 │   ├── sleep_model.keras
 │   ├── sleep_scaler.pkl
 │   ├── productivity_model.keras
-│   └── productivity_scaler.pkl
+│   ├── productivity_scaler.pkl
+│   └── backup/                 # Cadangan model lama sebelum retrain (gitignored)
 │
 ├── dataset/
 │   ├── raw/                    # CSV mentah (perlu diunduh dari Kaggle, lihat bawah)
-│   └── processed/              # sleep_cleaned.csv, productivity_cleaned.csv
+│   ├── processed/              # sleep_cleaned.csv, productivity_cleaned.csv (data publik)
+│   └── history/                # history.csv — data riwayat pengguna (gitignored)
 │
 ├── notebooks/                  # Eksplorasi data & training (Colab)
 │   ├── 01_data_exploration.ipynb
@@ -190,7 +185,7 @@ File `dataset/raw/*.csv` di repo kosong (0 byte). Untuk melatih ulang model, und
 1. **Sleep Health and Lifestyle Dataset** — Kaggle → simpan sebagai `dataset/raw/sleep_health_lifestyle.csv`
 2. **Student Productivity Prediction Challenge** (`train.csv`) — Kaggle → simpan sebagai `dataset/raw/student_performance.csv`
 
-Untuk **menjalankan aplikasi saja** dataset tidak diperlukan — cukup file model di `models/`.
+Untuk **menjalankan aplikasi saja** dataset tidak diperlukan — cukup file model di `models/`. Dataset processed juga **tidak dipakai** saat retraining (lihat [Retraining Model](#retraining-model-data-riwayat)): model dilatih ulang hanya dari data riwayat pengguna.
 
 ---
 
@@ -269,7 +264,7 @@ Contoh respons sukses:
   "produktivitas_label": "Tinggi",
   "produktivitas_confidence": 49.1,
   "insomnia_label": "Tidak Ada Gejala",
-  "insomnia_confidence": 1.31,
+  "insomnia_confidence": 1.96,
   "analisis_terpadu": "Produktivitas terprediksi Tinggi, indikasi insomnia: Tidak Ada Gejala. Pola tidur tergolong sehat, pertahankan kebiasaan baik."
 }
 ```
@@ -301,7 +296,7 @@ Nama field harus sama persis antara HTML dan backend.
 | `aktivitas_fisik` | int | 0 – 240 menit/hari | UI menyediakan 30/45/60/75/90 |
 | `layar_sebelum_tidur` | pilihan | Tidak, Jarang, Sering, Selalu | → `phone_usage_hours` |
 | `konsumsi_kafein` | pilihan | Tidak, Jarang, Sering, Selalu | → `coffee_intake_mg` |
-| `kesulitan_tidur` | pilihan | Tidak, Jarang, Sering, Selalu | → adjustment hybrid scoring |
+| `kesulitan_tidur` | pilihan | Tidak, Jarang, Sering, Selalu | → pemicu pada analisis terpadu |
 
 Angka desimal dengan koma (mis. `7,5`) otomatis dinormalkan menjadi `7.5`.
 
@@ -332,7 +327,66 @@ Aturan preprocessing penting:
 - `productivity_score` dibinning menjadi 3 kelas sebelum training.
 - Split evaluasi: 80% train / 20% test (`train_test_split`).
 
-Hasil pembersihan tersedia di `dataset/processed/` (`sleep_cleaned.csv`, `productivity_cleaned.csv`).
+Hasil pembersihan tersedia di `dataset/processed/` (`sleep_cleaned.csv`, `productivity_cleaned.csv`). Kedua file ini dipakai untuk training awal di notebook dan **tidak digabung** dengan data inputan/riwayat pengguna.
+
+---
+
+## Retraining Model (Data Riwayat)
+
+Model bisa dilatih ulang dari data riwayat pengguna tanpa membuka notebook. Script: [`retrain.py`](retrain.py).
+
+> **Data terpisah:** `dataset/processed/*.csv` adalah data referensi dari dataset publik dan **tidak digabung** dengan inputan pengguna. Retraining memakai data riwayat saja, jadi kedua file processed tetap bersih dan tidak pernah berubah.
+
+### Format file riwayat
+
+`dataset/history/history.csv` — satu baris per catatan, kolom gabungan kedua model. Kolom yang tidak relevan untuk suatu model **boleh kosong** (`NaN`).
+
+| Kolom | Untuk model | Keterangan |
+| :--- | :--- | :--- |
+| `Sleep Duration`, `Quality of Sleep`, `Physical Activity Level`, `Stress Level` | Insomnia | fitur input |
+| `target` | Insomnia | label: `1` = insomnia, `0` = bukan |
+| `sleep_hours`, `phone_usage_hours`, `coffee_intake_mg`, `exercise_minutes`, `stress_level` | Produktivitas | fitur input |
+| `productivity_class` | Produktivitas | label: `0` Rendah, `1` Sedang, `2` Tinggi |
+
+Tanpa label, baris riwayat **tidak dipakai** (retraining ini *supervised*, bukan pseudo-labeling). Pastikan sistem riwayat nanti menyimpan umpan balik/label aktual pengguna.
+
+> `dataset/history/*.csv` dan `models/backup/` masuk `.gitignore` — jangan commit data pribadi pengguna.
+
+### Menjalankan
+
+```bash
+python retrain.py                       # default (min. 100 baris insomnia, 300 produktivitas)
+python retrain.py --min-rows 500        # naikkan ambang batas data riwayat
+python retrain.py --history path/lain.csv  # file riwayat lain
+python retrain.py --force               # tetap simpan walau model lama lebih baik
+```
+
+Alur: baca data riwayat → buang baris tanpa label & duplikat → split 80/20 → latih `MLPClassifier` dengan hyperparameter sama seperti notebook → bandingkan akurasi dengan model lama pada test set riwayat yang sama → simpan kalau tidak lebih buruk.
+
+### Pengaman
+
+1. Skip kalau baris riwayat valid kurang dari ambang batas.
+2. Skip kalau data hanya berisi 1 kelas.
+3. Model lama di-backup ke `models/backup/<nama>_<timestamp>/` sebelum ditimpa.
+4. Skip kalau model baru lebih buruk dari model lama pada data riwayat (kecuali `--force`).
+
+> Konsekuensi desain ini: selama data riwayat masih sedikit, model lama (dilatih dari dataset publik) hampir selalu menang, sehingga retrain akan sering `SKIP`. Itu disengaja — model tidak diganti dengan model yang lebih lemah.
+
+### Jadwal berkala
+
+**Linux/macOS (cron, tiap Senin 02:00):**
+
+```cron
+0 2 * * 1 cd /path/ke/somna.ai && ./venv/bin/python retrain.py >> retrain.log 2>&1
+```
+
+**Windows (Task Scheduler):**
+
+```bat
+schtasks /Create /SC WEEKLY /D MON /TN "Somna Retrain" /TR "E:\path\ke\somna.ai\venv\Scripts\python.exe E:\path\ke\somna.ai\retrain.py" /ST 02:00
+```
+
+Setelah retrain, **restart server Flask** — `backend/prediction.py` meng-cache model di memori, jadi model baru baru terpakai setelah proses dijalankan ulang. (Saat `debug=True`, menulis file model memicu auto-reload.)
 
 ---
 
@@ -373,7 +427,7 @@ python -c "from app import create_app; create_app().run(port=5001)"
 
 | Anggota | Peran |
 | :--- | :--- |
-| **Aidil** | AI & Arsitektur Sistem — arsitektur JST, training model, hybrid scoring, dokumentasi AI |
+| **Aidil** | AI & Arsitektur Sistem — arsitektur JST, training model, pipeline retraining, dokumentasi AI |
 | **Rify** | Data & Backend Flask — pembersihan dataset, training model insomnia, backend & validasi |
 | **Inri** | Frontend & Integrasi UI — desain UI, template Jinja2, CSS/JS, integrasi form |
 

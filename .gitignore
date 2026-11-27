@@ -16,6 +16,10 @@ ENV/
 # Jupyter Notebook Checkpoints
 .ipynb_checkpoints/
 
+# Data riwayat pengguna & backup model (jangan di-commit)
+dataset/history/*.csv
+models/backup/
+
 # Testing & Coverage
 .pytest_cache/
 .coverage

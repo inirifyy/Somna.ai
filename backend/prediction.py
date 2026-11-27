@@ -35,7 +35,10 @@ def _muat(nama):
 # Mapping frekuensi form -> nilai numerik (lihat PRD §4.C)
 PHONE_USAGE_MAP = {"Tidak": 0.0, "Jarang": 1.0, "Sering": 2.0, "Selalu": 3.0}
 COFFEE_INTAKE_MAP = {"Tidak": 0, "Jarang": 100, "Sering": 250, "Selalu": 400}
-KESULITAN_ADJUSTMENT_MAP = {"Tidak": 0.0, "Jarang": 0.0, "Sering": 10.0, "Selalu": 20.0}
+# --- Hybrid scoring (insomnia adjustment) removed per UI/UX design decision ---
+# Kepercayaan model langsung digunakan tanpa penyesuaian frekuensi kesulitan.
+# Alasan: UI/UX belum dibuat, tidak perlu mengintegrasikan adjustmen ke skor.
+# ---------------------------------------------------------------------------
 
 PRODUCTIVITY_LABELS = ["Rendah", "Sedang", "Tinggi"]
 
@@ -110,9 +113,8 @@ def preprocess_inputs(durasi_tidur, kualitas_tidur, aktivitas_fisik, tingkat_str
         x1 = _clip([durasi_tidur, kualitas_tidur, aktivitas_fisik, tingkat_stres], SLEEP_FEATURE_BOUNDS)
         prob_insomnia = sleep["model"].predict_proba(sleep["scaler"].transform([x1]))[0][1] * 100
 
-        # Hybrid Scoring (PRD §4.C): tambah adjustment dari frekuensi kesulitan tidur
-        adjustment = KESULITAN_ADJUSTMENT_MAP.get(kesulitan_tidur, 0.0)
-        insomnia_score = float(np.clip(prob_insomnia + adjustment, 0, 100))
+        # Tanpa hybrid scoring: gunakan probabilitas mentah langsung
+        insomnia_score = float(np.clip(prob_insomnia, 0, 100))
         insomnia_label = _insomnia_category(insomnia_score)
 
     # --- Model 2: Produktivitas (sleep, phone, coffee, exercise, stress) ---

@@ -12,6 +12,7 @@ joblib
 matplotlib
 seaborn
 ipykernel
+jupyter
 
 # 4. Pengujian Kode
 pytest
